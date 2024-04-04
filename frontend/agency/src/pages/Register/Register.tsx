@@ -1,10 +1,10 @@
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
-import {api} from "../../utils/api.ts";
-import {Link, useNavigate} from "react-router-dom";
-import "./Login.sass"
 import React from "react";
+import {Link, useNavigate} from "react-router-dom";
+import "./Register.sass"
+import {api} from "../../utils/api.ts";
 
-const Login = () => {
+const Register = () => {
 
     const navigate = useNavigate()
 
@@ -12,10 +12,12 @@ const Login = () => {
         e.preventDefault()
         console.log("handleSubmit")
 
-        const emailField = e.currentTarget.elements[0] as HTMLInputElement
-        const passwordField = e.currentTarget.elements[1] as HTMLInputElement
+        const nameField = e.currentTarget.elements[0] as HTMLInputElement
+        const emailField = e.currentTarget.elements[1] as HTMLInputElement
+        const passwordField = e.currentTarget.elements[2] as HTMLInputElement
 
-        const response = await api.post("/login/", {
+        const response = await api.post("/register/", {
+            name: nameField.value,
             email: emailField.value,
             password: passwordField.value,
         })
@@ -25,17 +27,23 @@ const Login = () => {
         console.log(response.headers)
 
         if (response.status === 201) {
-            console.log("login successfully")
+            console.log("registered successfully")
             navigate("/")
         }
     }
 
     return (
-        <div className="login__form__wrapper">
-            <Form onSubmit={handleSubmit} className="login__form">
-                <h3 className="login__form__title">
-                    Форма входа
+        <div className="register__form__wrapper">
+            <Form onSubmit={handleSubmit} className="register__form">
+                <h3 className="register__form__title">
+                    Форма регистрации
                 </h3>
+                <FormGroup>
+                    <Label for="email-input">
+                        Введите имя
+                    </Label>
+                    <Input placeholder="Почта" type="text" id="email-input" required/>
+                </FormGroup>
                 <FormGroup>
                     <Label for="email-input">
                         Введите почту
@@ -48,15 +56,15 @@ const Login = () => {
                     </Label>
                     <Input placeholder="Пароль" type="password" id="password-input" required/>
                 </FormGroup>
-                <Link to="/register" className="link">
-                    Еще нет аккаунта?
+                <Link to="/login" className="link">
+                    Уже есть аккаунт?
                 </Link>
                 <Button color="primary">
-                    Войти
+                    Зарегистрироваться
                 </Button>
             </Form>
         </div>
     )
 }
 
-export default Login
+export default Register
