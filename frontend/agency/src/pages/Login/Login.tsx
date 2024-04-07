@@ -1,10 +1,12 @@
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
-import {api} from "../../utils/api.ts";
 import {Link, useNavigate} from "react-router-dom";
 import "./Login.sass"
 import React from "react";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 const Login = () => {
+
+    const {login} = useAuth()
 
     const navigate = useNavigate()
 
@@ -15,16 +17,9 @@ const Login = () => {
         const emailField = e.currentTarget.elements[0] as HTMLInputElement
         const passwordField = e.currentTarget.elements[1] as HTMLInputElement
 
-        const response = await api.post("/login/", {
-            email: emailField.value,
-            password: passwordField.value,
-        })
+        const status = await login(emailField.value, passwordField.value)
 
-        console.log(response.status)
-        console.log(response.data)
-        console.log(response.headers)
-
-        if (response.status === 201) {
+        if (status === 201) {
             console.log("login successfully")
             navigate("/")
         }

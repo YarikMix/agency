@@ -4,14 +4,9 @@ from app.models import CustomUser
 
 
 class UserSerializer(serializers.ModelSerializer):
-    access_token = serializers.SerializerMethodField()
-
-    def get_access_token(self, user):
-        return self.context.get("access_token", "")
-
     class Meta:
         model = CustomUser
-        fields = ('id', 'name', 'email', 'is_moderator', 'access_token')
+        fields = ('id', 'name', 'email', 'is_moderator')
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):

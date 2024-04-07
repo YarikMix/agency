@@ -58,8 +58,7 @@ def register(request):
 
     message = {
         'message': 'User registered successfully',
-        'user_id': user.id,
-        "access_token": access_token
+        'user_id': user.id
     }
 
     response = Response(message, status=status.HTTP_201_CREATED)

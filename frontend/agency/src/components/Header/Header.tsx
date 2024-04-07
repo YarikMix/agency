@@ -2,8 +2,17 @@ import "./Header.sass"
 import logo from "../../assets/logo.png"
 import {Link} from "react-router-dom";
 import {Button} from "reactstrap";
+import {useAuth} from "../../hooks/useAuth.ts";
+import avatar from "../../../src/assets/avatar.png"
+import {useEffect} from "react";
 
 const Header = () => {
+    const {is_authenticated, checkUser} = useAuth()
+
+    useEffect(() => {
+        checkUser()
+    }, []);
+
     return (
         <header className="header">
             <Link to="/" className="logo">
@@ -25,12 +34,18 @@ const Header = () => {
                 </div>
             </nav>
 
-            <div className="profile">
-                {/*<img src={avatar} alt=""/>*/}
-                <Link to="/login">
-                    <Button color="primary">Войти</Button>
+            {!is_authenticated ?
+                <div className="profile">
+                    <Link to="/login">
+                        <Button color="primary">Войти</Button>
+                    </Link>
+                </div>
+                :
+                <Link to="/profile" className="user-profile-link">
+                    <img src={avatar} alt=""/>
                 </Link>
-            </div>
+            }
+
         </header>
     )
 }

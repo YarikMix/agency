@@ -2,9 +2,11 @@ import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import "./Register.sass"
-import {api} from "../../utils/api.ts";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 const Register = () => {
+
+    const {register} = useAuth()
 
     const navigate = useNavigate()
 
@@ -16,17 +18,13 @@ const Register = () => {
         const emailField = e.currentTarget.elements[1] as HTMLInputElement
         const passwordField = e.currentTarget.elements[2] as HTMLInputElement
 
-        const response = await api.post("/register/", {
-            name: nameField.value,
-            email: emailField.value,
-            password: passwordField.value,
-        })
+        const status = await register(
+            nameField.value,
+            emailField.value,
+            passwordField.value,
+        )
 
-        console.log(response.status)
-        console.log(response.data)
-        console.log(response.headers)
-
-        if (response.status === 201) {
+        if (status === 201) {
             console.log("registered successfully")
             navigate("/")
         }
