@@ -39,3 +39,34 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+
+class Flat(models.Model):
+    BALCONY_CHOICES = (
+        (1, "Балкон"),
+        (2, "Лоджия")
+    )
+
+    PARKING_CHOICES = (
+        (1, "Наземная"),
+        (2, "Подземная")
+    )
+
+    name = models.CharField(max_length=100, default="Название", verbose_name="Название")
+    description = models.TextField(max_length=500, default="Описание", verbose_name="Описание")
+    rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат")
+    price = models.IntegerField(default=25000, verbose_name="Цена")
+    floor = models.CharField(default=1, verbose_name="Этаж")
+    square_general = models.IntegerField(default=34, verbose_name="Площадь общая")
+    squere_residential = models.IntegerField(default=18, verbose_name="Площадь жилая")
+    squere_kitchen = models.IntegerField(default=6, verbose_name="Площадь жилая")
+    balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES)
+    parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES)
+    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Квартира"
+        verbose_name_plural = "Квартиры"
