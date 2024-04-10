@@ -18,20 +18,39 @@ services:
     # Зависимость от другого сервиса
     depends_on:
       - pgdb
+      - minio
+
+  minio:
+    image: minio/minio:latest
+    command: server --console-address ":9001" /data/
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio124
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    expose:
+      - "9000"
+      - "9001"
+    ports:
+      - "9001:9001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    volumes:
+      - minio-storage:/data
 
   pgdb:
-    # Использование готового образа postgres
     image: postgres
-    # Задание переменных окружения для контейнера с postgres
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-     # Задание имени контейнера для сервиса pgdb
     container_name: pgdb
-     # Связывание тома с директорией в контейнере для сохранения данных postgres
     volumes:
       - pgdbdata:/var/lib/postgresql/data/
 
 volumes:
   pgdbdata: null
+  minio-storage:

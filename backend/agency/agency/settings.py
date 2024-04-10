@@ -126,3 +126,9 @@ JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": "MY_SIGNING_KEY_123",
 }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'images'
+AWS_ACCESS_KEY_ID = 'minio'
+AWS_SECRET_ACCESS_KEY = 'minio124'
+AWS_S3_ENDPOINT_URL = 'http://127.0.0.1:9000'

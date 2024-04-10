@@ -9,6 +9,5 @@ RUN pip install -r req.txt
 
 
 COPY docker-entrypoint.sh .
-RUN sed -i 's/\r$//g' /usr/src/app/docker-entrypoint.sh
 RUN chmod +x /usr/src/app/docker-entrypoint.sh
-ENTRYPOINT [ "/usr/src/app/docker-entrypoint.sh" ]
+ENTRYPOINT sh /usr/src/app/docker-entrypoint.sh
