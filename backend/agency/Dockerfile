@@ -10,4 +10,4 @@ RUN pip install -r req.txt
 
 COPY docker-entrypoint.sh .
 RUN chmod +x /usr/src/app/docker-entrypoint.sh
-ENTRYPOINT sh /usr/src/app/docker-entrypoint.sh
+ENTRYPOINT python manage.py migrate && python manage.py makemigrations && python manage.py runserver 0.0.0.0:8000
