@@ -7,4 +7,6 @@ urlpatterns = [
     path("api/login/", login),
     path("api/check/", check),
     path("api/logout/", logout),
+
+    path("api/flats/", get_flats),
 ]

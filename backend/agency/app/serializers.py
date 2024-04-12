@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.models import CustomUser
+from app.models import CustomUser, Flat
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -31,5 +31,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+
+
+class FlatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flat
+        fields = "__all__"
+
+
 
 

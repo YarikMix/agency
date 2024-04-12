@@ -3,7 +3,7 @@ import {Button} from "reactstrap";
 import avatar from "../../assets/avatar.png";
 import {useAuth} from "../../hooks/useAuth.ts";
 import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import {FormEvent, useEffect} from "react";
 
 const Profile = () => {
     const {is_authenticated, name, email, logout} = useAuth()
@@ -16,7 +16,7 @@ const Profile = () => {
         }
     }, []);
 
-    const handleLogout = async (e) => {
+    const handleLogout = async (e:FormEvent) => {
         e.preventDefault()
         console.log("handleLogout")
         const status = await logout()

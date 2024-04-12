@@ -5,16 +5,20 @@ from rest_framework.response import Response
 
 from agency import settings
 from app.jwt_helper import create_access_token, get_access_token, get_jwt_payload
-from app.models import CustomUser
+from app.models import CustomUser, Flat
 from app.permisions import IsAuthenticated
-from app.serializers import UserLoginSerializer, UserSerializer, UserRegisterSerializer
+from app.serializers import UserLoginSerializer, UserSerializer, UserRegisterSerializer, FlatSerializer
 
 access_token_lifetime = settings.JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
 
 
-@api_view(["POST"])
-def ping(request):
-    return Response("Понг")
+@api_view(["GET"])
+def get_flats(request):
+    flats = Flat.objects.all()
+
+    serializer = FlatSerializer(flats, many=True)
+
+    return Response(serializer.data)
 
 
 @api_view(["POST"])

@@ -72,7 +72,7 @@ class Flat(models.Model):
         verbose_name_plural = "Квартиры"
 
 
-class Sale:
+class Sale(models.Model):
     REALTY_CHOICES = (
         (1, "Квартира"),
         (2, "Команат"),
@@ -88,11 +88,22 @@ class Sale:
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", null=True, related_name='user')
     price = models.IntegerField(default="Цена", null=True)
 
+    class Meta:
+        verbose_name = "Продажа"
+        verbose_name_plural = "Продажи"
 
-class Building:
-    name = models.CharField(max_length=100, default="Название", verbose_name="Название")
+
+class Building(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название")
     metro = models.CharField(max_length=50)
     image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
-    flats = models.ManyToManyField(Flat, verbose_name="Квартиры", null=False)
+    #flats = models.ManyToManyField(Flat, verbose_name="Квартиры", null=False)
     price = models.IntegerField(verbose_name="Минимальная цена квартир", null=False)
     mortgage = models.FloatField(verbose_name="Минимальный процент ипотеки", null=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Новостройка"
+        verbose_name_plural = "Новостройки"
