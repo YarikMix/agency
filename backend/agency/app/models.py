@@ -70,3 +70,29 @@ class Flat(models.Model):
     class Meta:
         verbose_name = "Квартира"
         verbose_name_plural = "Квартиры"
+
+
+class Sale:
+    REALTY_CHOICES = (
+        (1, "Квартира"),
+        (2, "Команат"),
+        (3, "Дом"),
+        (4, "Земельный участок"),
+        (5, "Дача"),
+        (6, "Гараж")
+    )
+
+    realty_type = models.IntegerField(default=1, verbose_name="Тип недвижимости")
+    description = models.TextField(max_length=500, verbose_name="Описание")
+    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", null=True, related_name='user')
+    price = models.IntegerField(default="Цена", null=True)
+
+
+class Building:
+    name = models.CharField(max_length=100, default="Название", verbose_name="Название")
+    metro = models.CharField(max_length=50)
+    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
+    flats = models.ManyToManyField(Flat, verbose_name="Квартиры", null=False)
+    price = models.IntegerField(verbose_name="Минимальная цена квартир", null=False)
+    mortgage = models.FloatField(verbose_name="Минимальный процент ипотеки", null=False)
