@@ -3,9 +3,10 @@ export type FlatType = {
     image: string,
     price: number,
     rooms: number,
-    square_general: number,
+    square: number,
     floor: string,
     address: string,
     metro: string,
-    name: string
+    name: string,
+    description: string
 }

@@ -35,7 +35,7 @@ const FlatList = () => {
                             <span className="item-label-2">Коммунальные платежи включены в стоимость без учета счетчиков</span>
                             <div className="general-info">
                                 <span>{item.rooms}-комн.кв.</span>
-                                <span>{item.square_general}м <sup>2</sup></span>
+                                <span>{item.square}м <sup>2</sup></span>
                                 <span>{item.floor} эт.</span>
                             </div>
                             <div className="address-info">
@@ -43,7 +43,7 @@ const FlatList = () => {
                             </div>
                             <div className="metro-info">
                                 <img src="/src/assets/metro.svg" alt=""/>
-                                <span>{item.metro}</span>
+                                <span>станция {item.metro}</span>
                             </div>
                         </div>
                         <div className="user-info">
