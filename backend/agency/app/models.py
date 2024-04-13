@@ -66,7 +66,6 @@ class Flat(models.Model):
     rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат", choices=ROOMS_CHOICES, null=True)
     price = models.IntegerField(default=25000, verbose_name="Цена", null=True)
     floor = models.CharField(default=1, verbose_name="Этаж", null=True)
-    square = models.IntegerField(default=34, verbose_name="Площадь общая", null=True)
     balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES, null=True)
     parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES, null=True)
     image = models.ImageField(default="flats/default.jpeg", verbose_name="Картинка", null=True)

@@ -66,7 +66,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     container_name: pgdb
     volumes:
-      - pgdbdata:/var/lib/postgresql/data/
+      - pgdbdata:/var/lib/postgresql/data
 
 volumes:
   minio-data:
