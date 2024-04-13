@@ -20,6 +20,13 @@ def get_flats(request):
 
     return Response(serializer.data)
 
+@api_view(["GET"])
+def get_flat(request, flat_id):
+    flats = Flat.objects.get(pk=flat_id)
+
+    serializer = FlatSerializer(flats)
+
+    return Response(serializer.data)
 
 @api_view(["POST"])
 def login(request):

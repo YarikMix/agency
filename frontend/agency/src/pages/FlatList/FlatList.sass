@@ -1,0 +1,98 @@
+@import "../../utils/Variables"
+
+.rent-page
+	width: 100%
+	height: 100vh
+	padding: 100px 10%
+	background: $background
+
+	.items-container
+		width: 100%
+		display: grid
+		grid-template-columns: repeat(auto-fit, minmax(325px, 0.15fr))
+		grid-column-gap: 25px
+		grid-row-gap: 25px
+		justify-content: center
+
+		.item
+			background: #fff
+			display: flex
+			flex-direction: column
+			border-radius: 12px
+			transition: 0.3s
+			cursor: pointer
+			border: 1px solid #d6dadc
+			overflow: hidden
+
+			&:hover
+				box-shadow: 0 3px 30px 6px rgba(153,153,153,0.5)
+
+			.item-images
+				width: 100%
+
+				img
+					width: 100%
+					background-size: cover
+					height: 250px
+
+			.item-info
+				width: 100%
+				display: flex
+				flex-direction: column
+				padding: 15px
+				gap: 5px
+
+				.item-price
+					color: #333
+					font-size: 24px
+
+					&:after
+						content: '\20BD'
+						position: relative
+						left: 5px
+
+				.item-label-1
+					color: #838c91
+
+				.item-label-2
+					color: #838c91
+
+				.general-info
+					display: flex
+					color: #333
+					gap: 15px
+					font-weight: bold
+
+				.address-info
+					color: #333
+
+				.metro-info
+					color: #333
+					display: flex
+					gap: 5px
+					align-items: center
+
+			.user-info
+				width: 100%
+				display: flex
+				align-items: center
+				padding: 10px
+				gap: 15px
+
+				.user-avatar
+					width: 60px
+					height: 60px
+
+				.user-info-container
+					display: flex
+					flex-direction: column
+					align-items: center
+
+					.phone
+						color: #333
+						font-weight: bold
+
+					.name
+						color: #838c91
+
+

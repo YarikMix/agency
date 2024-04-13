@@ -9,4 +9,5 @@ urlpatterns = [
     path("api/logout/", logout),
 
     path("api/flats/", get_flats),
+    path("api/flats/<int:flat_id>/", get_flat),
 ]

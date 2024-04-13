@@ -52,17 +52,27 @@ class Flat(models.Model):
         (2, "Подземная")
     )
 
-    name = models.CharField(max_length=100, default="Название", verbose_name="Название")
-    description = models.TextField(max_length=500, default="Описание", verbose_name="Описание")
-    rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат")
-    price = models.IntegerField(default=25000, verbose_name="Цена")
-    floor = models.CharField(default=1, verbose_name="Этаж")
-    square_general = models.IntegerField(default=34, verbose_name="Площадь общая")
-    squere_residential = models.IntegerField(default=18, verbose_name="Площадь жилая")
-    squere_kitchen = models.IntegerField(default=6, verbose_name="Площадь жилая")
-    balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES)
-    parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES)
-    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
+    ROOMS_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4)
+    )
+
+    name = models.CharField(max_length=100, default="Название", verbose_name="Название", null=True)
+    description = models.TextField(max_length=500, default="Описание", verbose_name="Описание", null=True)
+    address = models.CharField(max_length=100, default="ул. Ломоносовский проспект, 25к2", verbose_name="Адрес", null=True)
+    metro = models.CharField(max_length=50, default="Люберцы", null=True)
+    rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат", choices=ROOMS_CHOICES, null=True)
+    price = models.IntegerField(default=25000, verbose_name="Цена", null=True)
+    floor = models.CharField(default=1, verbose_name="Этаж", null=True)
+    square_general = models.IntegerField(default=34, verbose_name="Площадь общая", null=True)
+    squere_residential = models.IntegerField(default=18, verbose_name="Площадь жилая", null=True)
+    squere_kitchen = models.IntegerField(default=6, verbose_name="Площадь жилая", null=True)
+    balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES, null=True)
+    parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES, null=True)
+    image = models.ImageField(default="flats/default.jpeg", verbose_name="Картинка", null=True)
+    renter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Арендодатель", null=True)
 
     def __str__(self):
         return self.name
@@ -85,7 +95,7 @@ class Sale(models.Model):
     realty_type = models.IntegerField(default=1, verbose_name="Тип недвижимости")
     description = models.TextField(max_length=500, verbose_name="Описание")
     image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", null=True, related_name='user')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", null=True)
     price = models.IntegerField(default="Цена", null=True)
 
     class Meta:

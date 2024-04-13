@@ -21,7 +21,7 @@ const Header = () => {
 
             <nav className="navigation">
                 <div className="nav__item">
-                    <Link to="/rent">Аренда</Link>
+                    <Link to="/flats/">Аренда</Link>
                 </div>
                 <div className="nav__item">
                     <Link to="/">Продажа</Link>

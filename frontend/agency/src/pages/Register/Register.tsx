@@ -12,7 +12,6 @@ const Register = () => {
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement> ) => {
         e.preventDefault()
-        console.log("handleSubmit")
 
         const nameField = e.currentTarget.elements[0] as HTMLInputElement
         const emailField = e.currentTarget.elements[1] as HTMLInputElement
