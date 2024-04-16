@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.models import CustomUser, Flat
+from app.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,5 +39,9 @@ class FlatSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MortgageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mortgage
+        fields = "__all__"
 
 

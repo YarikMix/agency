@@ -24,13 +24,10 @@ const Header = () => {
                     <Link to="/flats/">Аренда</Link>
                 </div>
                 <div className="nav__item">
-                    <Link to="/">Продажа</Link>
+                    <Link to="/sale/">Продажа</Link>
                 </div>
                 <div className="nav__item">
-                    <Link to="/">Новостройки</Link>
-                </div>
-                <div className="nav__item">
-                    <Link to="/">Ипотека</Link>
+                    <Link to="/mortgage">Ипотека</Link>
                 </div>
             </nav>
 

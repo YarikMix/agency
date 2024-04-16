@@ -10,4 +10,6 @@ urlpatterns = [
 
     path("api/flats/", get_flats),
     path("api/flats/<int:flat_id>/", get_flat),
+    path("api/mortgages/", get_mortgages),
+    path("api/mortgages/<int:mortgage_id>/", get_mortgage),
 ]

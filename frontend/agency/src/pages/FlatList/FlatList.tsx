@@ -41,10 +41,6 @@ const FlatList = () => {
                             <div className="address-info">
                                 <span>{item.address}</span>
                             </div>
-                            <div className="metro-info">
-                                <img src="/src/assets/metro.svg" alt=""/>
-                                <span>станция {item.metro}</span>
-                            </div>
                         </div>
                         <div className="user-info">
                             <img className="user-avatar" src="/src/assets/avatar.png" alt=""/>

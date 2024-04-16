@@ -10,3 +10,16 @@ export type FlatType = {
     name: string,
     description: string
 }
+
+export type MortgageType = {
+    id: number,
+    name: string,
+    bank_name: string,
+    bank_image: string,
+    min_credit_period: string,
+    max_credit_period: string,
+    min_credit_amount: string,
+    max_credit_amount: string,
+    price: string,
+    percent: string
+}

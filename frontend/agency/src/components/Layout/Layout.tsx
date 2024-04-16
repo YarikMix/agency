@@ -1,12 +1,12 @@
 import Header from "../Header/Header.tsx"
-import Routers from "../../routers/Routers.tsx"
+import Router from "../../modules/Router.tsx"
 
 const Layout = () => {
     return (
         <div>
             <Header />
             <div>
-                <Routers></Routers>
+                <Router></Router>
             </div>
         </div>
     )

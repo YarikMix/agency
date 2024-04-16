@@ -59,20 +59,16 @@ class Flat(models.Model):
         (4, 4)
     )
 
-    name = models.CharField(max_length=100, default="Название", verbose_name="Название", null=True)
     description = models.TextField(max_length=500, default="Описание", verbose_name="Описание", null=True)
     address = models.CharField(max_length=100, default="ул. Ломоносовский проспект, 25к2", verbose_name="Адрес", null=True)
-    metro = models.CharField(max_length=50, default="Люберцы", null=True)
     rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат", choices=ROOMS_CHOICES, null=True)
     price = models.IntegerField(default=25000, verbose_name="Цена", null=True)
     floor = models.CharField(default=1, verbose_name="Этаж", null=True)
+    square = models.IntegerField(default=1, verbose_name="Площадь", null=True)
     balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES, null=True)
     parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES, null=True)
-    image = models.ImageField(default="flats/default.jpeg", verbose_name="Картинка", null=True)
+    image = models.ImageField(default="default.jpeg", verbose_name="Картинка", null=True)
     renter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Арендодатель", null=True)
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         verbose_name = "Квартира"
@@ -100,17 +96,20 @@ class Sale(models.Model):
         verbose_name_plural = "Продажи"
 
 
-class Building(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Название")
-    metro = models.CharField(max_length=50)
-    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
-    #flats = models.ManyToManyField(Flat, verbose_name="Квартиры", null=False)
-    price = models.IntegerField(verbose_name="Минимальная цена квартир", null=False)
-    mortgage = models.FloatField(verbose_name="Минимальный процент ипотеки", null=False)
+class Mortgage(models.Model):
+    name = models.CharField(default="Жильё от застройщика с господдержкой по 2 документам", max_length=100, verbose_name="Название")
+    bank_name = models.CharField(default="Сбербанк", max_length=100, verbose_name="Название")
+    bank_image = models.ImageField(default="default.png", verbose_name="Логотип банка")
+    min_credit_period = models.IntegerField(default=1, verbose_name="Минимальный срок кредита", null=True)
+    max_credit_period = models.IntegerField(default=30, verbose_name="Максимальный срок кредита", null=True)
+    min_credit_amount = models.IntegerField(default=100000, verbose_name="Минимальный размер кредита", null=True)
+    max_credit_amount = models.IntegerField(default=6000000, verbose_name="Максимальный размер кредита", null=True)
+    price = models.IntegerField(default="23995", verbose_name="Платёж", null=True)
+    percent = models.FloatField(default="7.7", verbose_name="Ставка", null=True)
 
     def __str__(self):
-        return self.name
+        return "Ипотека №" + str(self.pk)
 
     class Meta:
-        verbose_name = "Новостройка"
-        verbose_name_plural = "Новостройки"
+        verbose_name = "Ипотека"
+        verbose_name_plural = "Ипотеки"

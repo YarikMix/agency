@@ -5,9 +5,9 @@ from rest_framework.response import Response
 
 from agency import settings
 from app.jwt_helper import create_access_token, get_access_token, get_jwt_payload
-from app.models import CustomUser, Flat
+from app.models import *
 from app.permisions import IsAuthenticated
-from app.serializers import UserLoginSerializer, UserSerializer, UserRegisterSerializer, FlatSerializer
+from app.serializers import *
 
 access_token_lifetime = settings.JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
 
@@ -20,6 +20,7 @@ def get_flats(request):
 
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 def get_flat(request, flat_id):
     flats = Flat.objects.get(pk=flat_id)
@@ -27,6 +28,25 @@ def get_flat(request, flat_id):
     serializer = FlatSerializer(flats)
 
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_mortgages(request):
+    mortgages = Mortgage.objects.all()
+
+    serializer = MortgageSerializer(mortgages, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_mortgage(request, mortgage_id):
+    mortgage = Mortgage.objects.get(pk=mortgage_id)
+
+    serializer = MortgageSerializer(mortgage)
+
+    return Response(serializer.data)
+
 
 @api_view(["POST"])
 def login(request):
