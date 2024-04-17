@@ -5,9 +5,9 @@ from rest_framework.response import Response
 
 from agency import settings
 from app.jwt_helper import create_access_token, get_access_token, get_jwt_payload
-from app.models import *
 from app.permisions import IsAuthenticated
 from app.serializers import *
+from app.utils import identity_user
 
 access_token_lifetime = settings.JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
 
@@ -15,6 +15,11 @@ access_token_lifetime = settings.JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()
 @api_view(["GET"])
 def get_flats(request):
     flats = Flat.objects.all()
+
+    rooms = request.GET.get("rooms", "-1")
+
+    if rooms != "-1":
+        flats = flats.filter(rooms=rooms)
 
     serializer = FlatSerializer(flats, many=True)
 
@@ -26,6 +31,21 @@ def get_flat(request, flat_id):
     flats = Flat.objects.get(pk=flat_id)
 
     serializer = FlatSerializer(flats)
+
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_flat(request):
+    serializer = FlatSerializer(data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+
+        flat = Flat.objects.last()
+        flat.renter = identity_user(request)
+        flat.save()
 
     return Response(serializer.data)
 

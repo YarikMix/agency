@@ -74,13 +74,12 @@ const FlatPage = () => {
                     </div>
                     <div className="right-container">
                         <span className="flat-price">{data.price}</span>
-                        <span
-                            className="label">Коммунальные платежи включены в<br/> стоимость без учета счетчиков</span>
+                        <span className="label">Коммунальные платежи включены в<br/> стоимость без учета счетчиков</span>
                     </div>
                 </div>
                 <div className="flat-description-wrapper">
                     <h3>Описание</h3>
-                    <pre>{data.description}</pre>
+                    <span>{data.description}</span>
                 </div>
                 <div className="flat-info-wrapper">
                     <h3>Характеристики</h3>
@@ -160,10 +159,10 @@ const FlatPage = () => {
             </div>
             <div className="flat-owner-wrapper">
                 <img className="user-avatar" src="/src/assets/avatar.png" alt=""/>
-                <span className="name">Строева Валентина Сергеевна</span>
+                <span className="name">{data.renter.name}</span>
                 <div className="phone-container">
                     <MdOutlinePhone/>
-                    <span className="phone">+7 967 892 69 47</span>
+                    <span className="phone">{data.renter.phone}</span>
                 </div>
             </div>
         </div>

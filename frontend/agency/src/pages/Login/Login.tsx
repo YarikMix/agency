@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import "./Login.sass"
 import React from "react";
 import {useAuth} from "../../hooks/useAuth.ts";
+import {LoginCredentials} from "../../utils/types.ts";
 
 const Login = () => {
 
@@ -17,7 +18,12 @@ const Login = () => {
         const emailField = e.currentTarget.elements[0] as HTMLInputElement
         const passwordField = e.currentTarget.elements[1] as HTMLInputElement
 
-        const status = await login(emailField.value, passwordField.value)
+        const data:LoginCredentials = {
+            email: emailField.value,
+            password: passwordField.value
+        }
+
+        const status = await login(data)
 
         if (status === 201) {
             console.log("login successfully")

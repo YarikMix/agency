@@ -3,6 +3,7 @@ import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import "./Register.sass"
 import {useAuth} from "../../hooks/useAuth.ts";
+import {RegisterCredentials} from "../../utils/types.ts";
 
 const Register = () => {
 
@@ -15,13 +16,17 @@ const Register = () => {
 
         const nameField = e.currentTarget.elements[0] as HTMLInputElement
         const emailField = e.currentTarget.elements[1] as HTMLInputElement
-        const passwordField = e.currentTarget.elements[2] as HTMLInputElement
+        const phoneField = e.currentTarget.elements[2] as HTMLInputElement
+        const passwordField = e.currentTarget.elements[3] as HTMLInputElement
 
-        const status = await register(
-            nameField.value,
-            emailField.value,
-            passwordField.value,
-        )
+        const credentials:RegisterCredentials = {
+            name: nameField.value,
+            email: emailField.value,
+            phone: phoneField.value,
+            password: passwordField.value
+        }
+
+        const status = await register(credentials)
 
         if (status === 201) {
             console.log("registered successfully")
@@ -36,16 +41,22 @@ const Register = () => {
                     Форма регистрации
                 </h3>
                 <FormGroup>
-                    <Label for="email-input">
-                        Введите имя
+                    <Label for="name-input">
+                        Введите ФИО
                     </Label>
-                    <Input placeholder="Почта" type="text" id="email-input" required/>
+                    <Input placeholder="ФИО" type="text" id="name-input" required/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="email-input">
                         Введите почту
                     </Label>
                     <Input placeholder="Почта" type="email" id="email-input" required/>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="phone-input">
+                        Введите телефон
+                    </Label>
+                    <Input placeholder="Телефон" type="text" id="phone-input" required/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="password-input">

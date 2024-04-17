@@ -1,53 +1,76 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser, cleanUser} from "../store/userSlice";
 import {api} from "../utils/api.ts";
+import {LoginCredentials, RegisterCredentials, UserType} from "../utils/types.ts";
 
 export function useAuth() {
     // @ts-ignore
-    const {is_authenticated, name, email} = useSelector(state => state.user)
+    const {is_authenticated, name, email, phone} = useSelector(state => state.user)
 
     const dispatch = useDispatch()
 
     const checkUser = async () => {
         const response = await api.post("/check/")
         if (response.status == 200) {
-            await setUser(response.data.id, response.data.name, response.data.email)
+            const data:UserType = {
+                id: response.data.id,
+                name: response.data.name,
+                email: response.data.email,
+                phone: response.data.phone,
+                is_authenticated: true
+            }
+
+            await setUser(data)
         }
     }
 
-    const login = async (email:string, password:string) => {
+    const login = async ({email, password}:LoginCredentials) => {
+        console.log("login")
+        console.log(email)
+        console.log(password)
+
         const response = await api.post("/login/", {
             email: email,
             password: password,
         })
 
         if (response.status == 201) {
-            await setUser(response.data.id, response.data.name, response.data.email)
+            const data:UserType = {
+                id: response.data.id,
+                name: response.data.name,
+                email: response.data.email,
+                phone: response.data.phone,
+                is_authenticated: true
+            }
+
+            await setUser(data)
         }
 
         return response.status
     }
 
-    const register = async (name:string, email:string, password:string) => {
+    const register = async ({name, email, phone, password}:RegisterCredentials) => {
         const response = await api.post("/register/", {
             name: name,
             email: email,
             password: password,
+            phone: phone
         })
 
         if (response.status == 201) {
-            await login(email, password)
+            await login({email, password})
         }
 
         return response.status
     }
 
-    const setUser = async (id:number, name:string, email:string) => {
+    const setUser = async ({id, name, email, phone, is_authenticated}:UserType) => {
         dispatch(updateUser({
-            is_authenticated: true,
+            is_authenticated: is_authenticated,
             id: id,
             name: name,
-            email: email
+            email: email,
+            phone: phone
         }))
     }
 
@@ -63,6 +86,7 @@ export function useAuth() {
         is_authenticated,
         name,
         email,
+        phone,
         login,
         register,
         checkUser,

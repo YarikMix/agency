@@ -1,6 +1,7 @@
 import heroBg from "../../assets/heroBg.jpg"
 import "./Home.sass"
 import {Button} from "reactstrap";
+import {Link} from "react-router-dom";
 
 const Home = () => {
     return (
@@ -14,7 +15,9 @@ const Home = () => {
                     коммерческой недвижимости Подмосковья, помощь в получении ипотеки.
                     Защита интересов наших клиентов и юридическая чистота проводимых сделок позволяют нам уже 32
                     года занимать лидирующее место на рынке!</p>
-                <Button color="primary" className="btn">Каталог недвижимости</Button>
+                <Link to="/flats/">
+                    <Button color="primary" className="btn">Каталог недвижимости</Button>
+                </Link>
             </div>
         </section>
     )

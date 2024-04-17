@@ -2,15 +2,26 @@ import "./FlatList.sass"
 import {useEffect, useState} from "react";
 import {api} from "../../utils/api.ts";
 import {FlatType} from "../../utils/types.ts";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {Button, ButtonGroup} from "reactstrap";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 const FlatList = () => {
+    const {is_authenticated} = useAuth()
+
     const [items, setItems] = useState<FlatType[]>([])
 
     const navigate = useNavigate()
 
+    const [roomsFilter, setRoomsFilter] = useState<string>("-1")
+
     const fetchItems = async () =>  {
-        const response = await api.get("/flats/")
+        const response = await api.get("/flats/", {
+            params: {
+                rooms: roomsFilter
+            }
+        })
+
         if (response.status == 200) {
             console.log(response.data)
             setItems(response.data)
@@ -19,37 +30,62 @@ const FlatList = () => {
 
     useEffect(() => {
         fetchItems()
-    }, []);
+    }, [roomsFilter]);
+
+    const roomsOptions = [-1, 1, 2, 3, 4]
 
     return (
         <div className="rent-page">
+            <div className="filters-container">
+                <div className="left-container">
+                    <h3>Комнатность</h3>
+                    <ButtonGroup className="me-2">
+                        {roomsOptions.map(option => (
+                            <Button color="primary" active={option.toString() == roomsFilter} onClick={() => setRoomsFilter(option.toString())} key={option}>
+                                {option > 0 ? option : "Все"}
+                            </Button>
+                        ))}
+                    </ButtonGroup>
+                </div>
+                <div className="right-container">
+                    {is_authenticated &&
+                        <Link to="/flats/add">
+                            <Button color="primary">
+                                Сдать в аренду
+                            </Button>
+                        </Link>
+                    }
+                </div>
+            </div>
             <div className="items-container">
                 {items.map((item) => (
-                    <div className="item" key={item.id} onClick={() => navigate("/flats/" + item.id)}>
-                        <div className="item-images">
-                            <img src={item.image.replace("minio", "localhost")} alt=""/>
-                        </div>
-                        <div className="item-info">
-                            <h3 className="item-price">{item.price}</h3>
-                            <span className="item-label-1">В месяц</span>
-                            <span className="item-label-2">Коммунальные платежи включены в стоимость без учета счетчиков</span>
-                            <div className="general-info">
-                                <span>{item.rooms}-комн.кв.</span>
-                                <span>{item.square}м <sup>2</sup></span>
-                                <span>{item.floor} эт.</span>
+                    <Link to={"/flats/" + item.id} key={item.id}>
+                        <div className="item" >
+                            <div className="item-images">
+                                <img src={item.image.replace("minio", "localhost")} alt=""/>
                             </div>
-                            <div className="address-info">
-                                <span>{item.address}</span>
+                            <div className="item-info">
+                                <h3 className="item-price">{item.price}</h3>
+                                <span className="item-label-1">В месяц</span>
+                                <span className="item-label-2">Коммунальные платежи включены в стоимость без учета счетчиков</span>
+                                <div className="general-info">
+                                    <span>{item.rooms}-комн.кв.</span>
+                                    <span>{item.square}м <sup>2</sup></span>
+                                    <span>{item.floor} эт.</span>
+                                </div>
+                                <div className="address-info">
+                                    <span>{item.address}</span>
+                                </div>
+                            </div>
+                            <div className="user-info">
+                                <img className="user-avatar" src="/src/assets/avatar.png" alt=""/>
+                                <div className="user-info-container">
+                                    <span className="phone">+{item.renter?.phone}</span>
+                                    <span className="name">{item.renter?.name}</span>
+                                </div>
                             </div>
                         </div>
-                        <div className="user-info">
-                            <img className="user-avatar" src="/src/assets/avatar.png" alt=""/>
-                            <div className="user-info-container">
-                                <span className="phone">+7 967 892 69 47</span>
-                                <span className="name">Строева Валентина Сергеевна</span>
-                            </div>
-                        </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

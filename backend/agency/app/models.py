@@ -4,25 +4,26 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, name, email, password="1234", **extra_fields):
+    def create_user(self, name, email, phone, password="1234", **extra_fields):
         extra_fields.setdefault('name', name)
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, phone=phone, **extra_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, name, email, password="1234", **extra_fields):
+    def create_superuser(self, name, email, phone,  password="1234", **extra_fields):
         extra_fields.setdefault('is_moderator', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(name, email, password, **extra_fields)
+        return self.create_user(name, email, phone, password, **extra_fields)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15, null=True)
     is_moderator = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)
@@ -67,8 +68,11 @@ class Flat(models.Model):
     square = models.IntegerField(default=1, verbose_name="Площадь", null=True)
     balcony = models.IntegerField(default=1, verbose_name="Балкон/лоджия", choices=BALCONY_CHOICES, null=True)
     parking = models.IntegerField(default=1, verbose_name="Парковка", choices=PARKING_CHOICES, null=True)
-    image = models.ImageField(default="default.jpeg", verbose_name="Картинка", null=True)
     renter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Арендодатель", null=True)
+    image = models.ImageField(default="default.jpeg", verbose_name="Картинка", null=True)
+
+    def __str__(self):
+        return f"Квартира {self.pk}"
 
     class Meta:
         verbose_name = "Квартира"
@@ -113,13 +117,3 @@ class Mortgage(models.Model):
     class Meta:
         verbose_name = "Ипотека"
         verbose_name_plural = "Ипотеки"
-
-class Ffasdfaf(models.Model):
-    name = models.CharField(default="Жильё от застройщика с господдержкой по 2 документам", max_length=100, verbose_name="Название")
-
-    def __str__(self):
-        return "Ипотека №" + str(self.pk)
-
-    class Meta:
-        verbose_name = "asdfasdf"
-        verbose_name_plural = "asdfasdf"

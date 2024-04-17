@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
+import {UserType} from "../utils/types.ts";
 
-const initialState = {
+const initialState: UserType = {
     id: null,
     name: "",
     email: "",
+    phone: "",
     is_authenticated: false
 }
 
@@ -16,6 +18,7 @@ const authSlice = createSlice({
             state.id = action.payload.id
             state.name = action.payload.name
             state.email = action.payload.email
+            state.phone = action.payload.phone
         },
         cleanUser: (state) => {
             state.id = null

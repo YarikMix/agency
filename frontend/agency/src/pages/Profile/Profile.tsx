@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {FormEvent, useEffect} from "react";
 
 const Profile = () => {
-    const {is_authenticated, name, email, logout} = useAuth()
+    const {is_authenticated, name, email, phone, logout} = useAuth()
 
     const navigate = useNavigate()
 
@@ -27,10 +27,19 @@ const Profile = () => {
 
     return (
         <div className="profile-wrapper">
-            <img src={avatar} alt="" className="user-avatar"/>
-            <h3>{name}</h3>
-            <span>{email}</span>
-            <Button onClick={handleLogout}>Выйти</Button>
+            <div className="user-info-container">
+                <img src={avatar} alt="" className="user-avatar"/>
+                <div className="block">
+                    <span>ФИО: {name}</span>
+                </div>
+                <div className="block">
+                    <span>Почта: {email}</span>
+                </div>
+                <div className="block">
+                    <span>Телефон: {phone}</span>
+                </div>
+                <Button onClick={handleLogout} color="primary">Выйти</Button>
+            </div>
         </div>
     )
 }

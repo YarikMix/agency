@@ -7,6 +7,7 @@ import FlatPage from "../pages/Flat/Flat.tsx";
 import FlatList from "../pages/FlatList/FlatList.tsx";
 import SalePage from "../pages/Sale/Sale.tsx";
 import MortgageList from "../pages/MortgageList/MortgageList.tsx";
+import AddFlatPage from "../pages/AddFlatPage/AddFlatPage.tsx";
 
 const Router = () => {
     return (
@@ -17,6 +18,7 @@ const Router = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/flats" element={<FlatList />} />
+            <Route path="/flats/add" element={<AddFlatPage />} />
             <Route path="/flats/:id" element={<FlatPage />} />
             <Route path="/sale" element={<SalePage />} />
             <Route path="/mortgage" element={<MortgageList />} />
