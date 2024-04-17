@@ -152,12 +152,12 @@ const AddFlatPage = () => {
                                 <div className='item'>
                                     {file.type.includes("image") ?
                                         <img
-                                            src={file.preview}
+                                            src={(file as any).preview}
                                             alt={file.name}
                                             width={200}
                                             height={200}
                                             onLoad={() => {
-                                                URL.revokeObjectURL(file.preview)
+                                                URL.revokeObjectURL((file as any).preview)
                                             }}
                                         />
                                         :

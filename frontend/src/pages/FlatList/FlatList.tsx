@@ -2,7 +2,7 @@ import "./FlatList.sass"
 import {useEffect, useState} from "react";
 import {api} from "../../utils/api.ts";
 import {FlatType} from "../../utils/types.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Button, ButtonGroup} from "reactstrap";
 import {useAuth} from "../../hooks/useAuth.ts";
 
@@ -10,8 +10,6 @@ const FlatList = () => {
     const {is_authenticated} = useAuth()
 
     const [items, setItems] = useState<FlatType[]>([])
-
-    const navigate = useNavigate()
 
     const [roomsFilter, setRoomsFilter] = useState<string>("-1")
 

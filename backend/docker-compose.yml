@@ -71,6 +71,12 @@ services:
         source: pgdbdata
         target: /var/lib/postgresql/data
 
+  client:
+    build: ../frontend
+    container_name: client_frontend
+    ports:
+      - "8776:80"
+
 volumes:
   minio-data:
   pgdbdata: null

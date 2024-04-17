@@ -97,12 +97,12 @@ const SalePage = () => {
                                 <div key={file.name} className='item'>
                                     {file.type.includes("image") ?
                                         <img
-                                            src={file.preview}
+                                            src={(file as any).preview}
                                             alt={file.name}
                                             width={100}
                                             height={100}
                                             onLoad={() => {
-                                                URL.revokeObjectURL(file.preview)
+                                                URL.revokeObjectURL((file as any).preview)
                                             }}
                                         />
                                         :
