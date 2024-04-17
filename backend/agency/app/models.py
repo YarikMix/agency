@@ -113,3 +113,13 @@ class Mortgage(models.Model):
     class Meta:
         verbose_name = "Ипотека"
         verbose_name_plural = "Ипотеки"
+
+class Ffasdfaf(models.Model):
+    name = models.CharField(default="Жильё от застройщика с господдержкой по 2 документам", max_length=100, verbose_name="Название")
+
+    def __str__(self):
+        return "Ипотека №" + str(self.pk)
+
+    class Meta:
+        verbose_name = "asdfasdf"
+        verbose_name_plural = "asdfasdf"

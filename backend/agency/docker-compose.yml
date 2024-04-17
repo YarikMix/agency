@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-  django:
-    image: uzman1
+  web:
     build: .
+    image: uzman
     container_name: django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -59,14 +59,16 @@ services:
       - minio
 
   pgdb:
-    image: postgres
+    image: postgres:16.0-alpine
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     container_name: pgdb
     volumes:
-      - pgdbdata:/var/lib/postgresql/data
+      - type: volume
+        source: pgdbdata
+        target: /var/lib/postgresql/data
 
 volumes:
   minio-data:
