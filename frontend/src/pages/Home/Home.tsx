@@ -16,7 +16,7 @@ const Home = () => {
                     Защита интересов наших клиентов и юридическая чистота проводимых сделок позволяют нам уже 32
                     года занимать лидирующее место на рынке!</p>
                 <Link to="/flats/">
-                    <Button color="primary" className="btn">Каталог недвижимости123</Button>
+                    <Button color="primary" className="btn">Каталог недвижимости</Button>
                 </Link>
             </div>
         </section>

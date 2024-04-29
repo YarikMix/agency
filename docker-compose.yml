@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   web:
-    build: .
+    build: ./backend
     image: uzman
     container_name: django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
     ports:
       - "8000:8000"
     environment:
@@ -72,10 +72,12 @@ services:
         target: /var/lib/postgresql/data
 
   client:
-    build: ../frontend
+    build: ./frontend
     container_name: client_frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
 
 volumes:
   minio-data:
