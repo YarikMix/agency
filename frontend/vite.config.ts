@@ -6,7 +6,7 @@ export default defineConfig({
         host: true,
         port: 3000,
         proxy: {
-           "/api": "http://django:8000",
+           "/api": "http://localhost:8000",
         }
     },
     plugins: [react()],

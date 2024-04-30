@@ -6,6 +6,7 @@ import "./Flat.sass"
 import {MdOutlinePhone} from "react-icons/md";
 import {Button, Form, FormGroup, Input} from "reactstrap";
 import {toast} from "react-toastify";
+import MortgageCalculator from "../../components/MortgageCalculation/MortgageCalculator.tsx";
 
 const FlatPage = () => {
     const { id } = useParams<{id: string}>();
@@ -74,7 +75,6 @@ const FlatPage = () => {
                     </div>
                     <div className="right-container">
                         <span className="flat-price">{data.price}</span>
-                        <span className="label">Коммунальные платежи включены в<br/> стоимость без учета счетчиков</span>
                     </div>
                 </div>
                 <div className="flat-description-wrapper">
@@ -132,16 +132,14 @@ const FlatPage = () => {
                             <span>Расположение на этаже</span>
                             <span>Не угловая</span>
                         </div>
-                        <div className="line">
-                            <span>Период аренды</span>
-                            <span>Длительный срок</span>
-                        </div>
                     </div>
                 </div>
+                <MortgageCalculator initPrice={data.price}/>
                 <Form className="flat-request-form" onSubmit={handleSubmit}>
                     <h3 className="login__form__title">Запрос информации </h3>
                     <FormGroup>
-                        <Input placeholder="Ваше имя" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required/>
+                        <Input placeholder="Ваше имя" type="text" id="name" value={name}
+                               onChange={(e) => setName(e.target.value)} required/>
                     </FormGroup>
                     <FormGroup>
                         <Input placeholder="Телефон" type="text" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required/>

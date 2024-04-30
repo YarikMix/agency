@@ -64,8 +64,6 @@ const FlatList = () => {
                             </div>
                             <div className="item-info">
                                 <h3 className="item-price">{item.price}</h3>
-                                <span className="item-label-1">В месяц</span>
-                                <span className="item-label-2">Коммунальные платежи включены в стоимость без учета счетчиков</span>
                                 <div className="general-info">
                                     <span>{item.rooms}-комн.кв.</span>
                                     <span>{item.square}м <sup>2</sup></span>

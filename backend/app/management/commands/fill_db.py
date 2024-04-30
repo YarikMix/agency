@@ -46,7 +46,7 @@ class Command(BaseCommand):
                 floor=random.randint(2, 20),
                 balcony=random.randint(1, 2),
                 parking=random.randint(1, 2),
-                price=random.randint(20, 50) * 1000,
+                price=random.randint(100, 250) * 100000,
                 square=random.randint(10, 30),
                 description=generate_flat_description(),
                 address=generate_flat_address(),
