@@ -9,29 +9,30 @@
 ## Основные страницы сайта
 
 ### Главная страница
-![](/images/1.png)
-
-### Страница авторизации
-
-![](/images/3.png)
-
-### Страница регистрации
-
-![](/images/4.png)
+![](/images/screens/1.png)
 
 ### Каталог недвижимости
 
-![](/images/4.png)
+![](/images/screens/2.png)
+
+### Страница авторизации
+
+![](/images/screens/3.png)
+
+### Страница регистрации
+
+![](/images/screens/4.png)
 
 ### Страница квартиры
 
-![](/images/5.png)
-![](/images/6.png)
+![](/images/screens/5.png)
+![](/images/screens/6.png)
+![](/images/screens/7.png)
 
 ### Страница с таблицей сделок
 
-![](/images/7.png)
+![](/images/screens/8.png)
 
 ### Страница сделки
 
-![](/images/8.png)
+![](/images/screens/9.png)
