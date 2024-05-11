@@ -205,7 +205,7 @@ const DealPage = () => {
         setStatus(response.data.status)
     }
 
-    const updateDealStatus = async () => {
+    const updateDealStatus = async (status:string) => {
         const response = await api.put("/deals/" + id + "/update_status/", {
             status: status
         })
@@ -216,8 +216,10 @@ const DealPage = () => {
     }
 
     const onChangeStatus = (status:string) => {
+        console.log("onChangeStatus")
+        console.log(status)
         setStatus(status)
-        updateDealStatus()
+        updateDealStatus(status)
     }
 
     useEffect(() => {
