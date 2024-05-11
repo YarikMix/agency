@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from django.db.models import Q
 
 from agency import settings
 from app.jwt_helper import create_access_token, get_access_token, get_jwt_payload
@@ -51,21 +53,55 @@ def add_flat(request):
 
 
 @api_view(["GET"])
-def get_mortgages(request):
-    mortgages = Mortgage.objects.all()
+@permission_classes([IsAuthenticated])
+def get_deals(request):
+    user = identity_user(request)
+    deals = Deal.objects.filter(Q(user=user) | Q(renter=user))
 
-    serializer = MortgageSerializer(mortgages, many=True)
+    serializer = DealSerializer(deals, many=True)
 
     return Response(serializer.data)
 
 
 @api_view(["GET"])
-def get_mortgage(request, mortgage_id):
-    mortgage = Mortgage.objects.get(pk=mortgage_id)
+@permission_classes([IsAuthenticated])
+def get_deal(request, deal_id):
+    deal = Deal.objects.get(pk=deal_id)
 
-    serializer = MortgageSerializer(mortgage)
+    serializer = DealSerializer(deal)
 
     return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_deal(request):
+    deal = Deal.objects.create()
+    deal.user = identity_user(request)
+    deal.renter = CustomUser.objects.get(pk=request.data["renter"])
+    deal.flat = Flat.objects.get(pk=request.data["flat"])
+    deal.date = timezone.now()
+    deal.save()
+
+    serializer = DealSerializer(deal)
+
+    return Response(serializer.data, status=200)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_deal_status(request, deal_id):
+    deal = Deal.objects.get(pk=deal_id)
+
+    serializer = DealSerializer(deal, data=request.data, partial=True)
+
+    print(request.data)
+    print(serializer.is_valid())
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data, status=200)
 
 
 @api_view(["POST"])

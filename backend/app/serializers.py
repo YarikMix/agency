@@ -6,7 +6,7 @@ from app.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'name', 'email', 'is_moderator', "phone")
+        fields = ('id', 'name', 'email', 'is_renter', "phone")
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -28,6 +28,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         return user
 
+
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
@@ -41,9 +42,13 @@ class FlatSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MortgageSerializer(serializers.ModelSerializer):
+class DealSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    renter = UserSerializer()
+    flat = FlatSerializer()
+
     class Meta:
-        model = Mortgage
+        model = Deal
         fields = "__all__"
 
 

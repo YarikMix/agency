@@ -19,7 +19,7 @@ const CustomDropdown = ({label, options, selectedItem, setSelectedItem}:Dropdown
             <span>{label}</span>
             <Dropdown isOpen={dropdownOpen} toggle={toggle} >
                 <DropdownToggle color="primary" caret>{options[selectedItem]}</DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu style={{width: "100%"}}>
                     {Object.entries(options).map(([key, value]) => (
                         <DropdownItem active={key == selectedItem} key={key} onClick={() => setSelectedItem(key)}>{value}</DropdownItem>
                     ))}

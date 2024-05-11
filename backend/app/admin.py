@@ -4,5 +4,4 @@ from app.models import *
 
 admin.site.register(CustomUser)
 admin.site.register(Flat)
-admin.site.register(Sale)
-admin.site.register(Mortgage)
+admin.site.register(Deal)

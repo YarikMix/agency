@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {FormEvent, useEffect, useState} from "react";
 import {api} from "../../utils/api.ts";
 import {FlatType} from "../../utils/types.ts";
@@ -7,9 +7,13 @@ import {MdOutlinePhone} from "react-icons/md";
 import {Button, Form, FormGroup, Input} from "reactstrap";
 import {toast} from "react-toastify";
 import MortgageCalculator from "../../components/MortgageCalculation/MortgageCalculator.tsx";
+import {formatPrice} from "../../utils/utils.ts";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 const FlatPage = () => {
     const { id } = useParams<{id: string}>();
+
+    const {is_authenticated, is_renter} = useAuth()
 
     const [name, setName] = useState<string>("")
     const [phone, setPhone] = useState<string>("")
@@ -25,12 +29,26 @@ const FlatPage = () => {
     const fetchData = async () =>  {
         const response = await api.get(`/flats/${id}`)
         if (response.status == 200) {
-            console.log(response.data)
             setData(response.data)
         }
     }
 
-    const handleSubmit = (e:FormEvent) => {
+    const createDeal = async () => {
+        const response = await api.post(`/deals/add/`, {
+            flat: data?.id,
+            renter: data?.renter.id
+        })
+
+        if (response.status == 200) {
+            toast.info(
+                <div>
+                    <Link to={"/deals/" + response.data.id}>Открыть сделку</Link>
+                </div>
+            );
+        }
+    }
+
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
 
         const formData = new FormData()
@@ -39,8 +57,11 @@ const FlatPage = () => {
         formData.append("email", email)
         formData.append("message", message)
 
-        // TODO
-        console.log(Object.fromEntries(formData))
+
+        if (is_authenticated) {
+            createDeal()
+            return
+        }
 
         toast.success(`Сообщение отправлено`);
 
@@ -74,7 +95,7 @@ const FlatPage = () => {
                         </div>
                     </div>
                     <div className="right-container">
-                        <span className="flat-price">{data.price}</span>
+                        <span className="flat-price">{formatPrice(data.price)}</span>
                     </div>
                 </div>
                 <div className="flat-description-wrapper">
@@ -134,26 +155,36 @@ const FlatPage = () => {
                         </div>
                     </div>
                 </div>
-                <MortgageCalculator initPrice={data.price}/>
-                <Form className="flat-request-form" onSubmit={handleSubmit}>
-                    <h3 className="login__form__title">Запрос информации </h3>
-                    <FormGroup>
-                        <Input placeholder="Ваше имя" type="text" id="name" value={name}
-                               onChange={(e) => setName(e.target.value)} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input placeholder="Телефон" type="text" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input placeholder="Ваш E-mail" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input placeholder="Ваше сообщение" type="textarea" id="message" value={message} onChange={(e) => setMessage(e.target.value)} required/>
-                    </FormGroup>
-                    <Button color="primary">
-                        Отправить
-                    </Button>
-                </Form>
+
+                {!is_renter && <MortgageCalculator initPrice={data.price}/> }
+
+                {!is_renter &&
+                    <Form className="flat-request-form" onSubmit={handleSubmit}>
+                        <h3 className="login__form__title">Запрос информации</h3>
+
+                        {!is_authenticated &&
+                            <div>
+                                <FormGroup>
+                                    <Input placeholder="Ваше имя" type="text" id="name" value={name}
+                                           onChange={(e) => setName(e.target.value)} required/>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Input placeholder="Телефон" type="text" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Input placeholder="Ваш E-mail" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                                </FormGroup>
+                            </div>
+                        }
+                        <FormGroup>
+                            <Input placeholder="Ваше сообщение" type="textarea" id="message" value={message} onChange={(e) => setMessage(e.target.value)} required/>
+                        </FormGroup>
+
+                        <Button color="primary">
+                            Отправить
+                        </Button>
+                    </Form>
+                }
             </div>
             <div className="flat-owner-wrapper">
                 <img className="user-avatar" src="/src/assets/avatar.png" alt=""/>

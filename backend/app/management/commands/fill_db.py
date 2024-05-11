@@ -3,6 +3,7 @@ import random
 from django.core.management.base import BaseCommand
 from ...models import *
 from faker import Faker
+from datetime import datetime, timedelta, timezone
 
 
 def generate_phone_number():
@@ -23,69 +24,73 @@ def generate_flat_address():
     arr = ["Волоколамский район, г. Волоколамск, ул.50 лет Октября", "Лотошинский район, пос. Новолотошино, ул.Западная, 2", "Волоколамский район, г. Волоколамск, Школьный проезд, д.7"]
     return random.choice(arr)
 
+def get_random_renter():
+    return CustomUser.objects.filter(is_renter=True).order_by('?')[0]
+
+def get_random_user():
+    return CustomUser.objects.filter(is_renter=False).order_by('?')[0]
+
+def get_random_flat():
+    return Flat.objects.all().order_by('?')[0]
+
+def random_date():
+    now = datetime.now(tz=timezone.utc)
+    return now + timedelta(random.uniform(-1, 0) * 100)
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         print("fill_db")
-
         CustomUser.objects.all().delete()
         Flat.objects.all().delete()
-        Mortgage.objects.all().delete()
-
-        CustomUser.objects.create_superuser("root", "root@root.com", "1234")
+        Deal.objects.all().delete()
 
         fake = Faker("ru_RU")
 
         for i in range(1, 10):
-            CustomUser.objects.create_user(fake.name(), f"user{i}@user.com", generate_phone_number(), "1234")
+            CustomUser.objects.create_user(fake.name(), f"user{i}@user.com", generate_phone_number())
 
-        for i in range(1, 9):
-            flat = Flat(
-                renter=CustomUser.objects.filter(is_moderator=False).order_by('?')[0],
-                rooms=random.randint(1, 4),
-                floor=random.randint(2, 20),
-                balcony=random.randint(1, 2),
-                parking=random.randint(1, 2),
-                price=random.randint(100, 250) * 100000,
-                square=random.randint(10, 30),
-                description=generate_flat_description(),
-                address=generate_flat_address(),
-                image=f"flats/{i}.jpeg"
-            )
-            flat.save()
+        for i in range(1, 10):
+            CustomUser.objects.create_renter(fake.name(), f"renter{i}@renter.com", generate_phone_number())
 
-        Mortgage(
-            name='Ипотечный кредит с Господдержкой по акции "Выбери свою ставку" с расш. страх. для МиМО+ЛО',
-            bank_name="Россельхозбанк",
-            bank_image="banks/1.png",
-            min_credit_period=1,
-            max_credit_period=30,
-            min_credit_amount=300000,
-            max_credit_amount=6000000,
-            price=25582,
-            percent=7.3
-        ).save()
+        for renter in CustomUser.objects.filter(is_renter=True):
+            for _ in range(random.randint(1, 3)):
+                flat = Flat(
+                    renter=renter,
+                    rooms=random.randint(1, 4),
+                    floor=random.randint(2, 20),
+                    balcony=random.randint(1, 2),
+                    parking=random.randint(1, 2),
+                    price=random.randint(100, 250) * 100000,
+                    square=random.randint(10, 30),
+                    description=generate_flat_description(),
+                    address=generate_flat_address(),
+                    image=f"flats/{random.randint(1, 8)}.jpeg"
+                )
+                flat.save()
 
-        Mortgage(
-            name='Жильё от застройщика с господдержкой для МиМО и СП+ЛО',
-            bank_name="Газпромбанк",
-            bank_image="banks/2.png",
-            min_credit_period=1,
-            max_credit_period=25,
-            min_credit_amount=100000,
-            max_credit_amount=3000000,
-            price=23995,
-            percent=7.75
-        ).save()
+        for user in CustomUser.objects.filter(is_renter=False):
+            for _ in range(random.randint(1, 3)):
+                deal = Deal(
+                    user=user,
+                    flat=get_random_flat(),
+                    status=random.randint(1, 2),
+                    date=random_date()
+                )
+                deal.renter = deal.flat.renter
+                deal.save()
 
-        Mortgage(
-            name='Жильё от застройщика с господдержкой (только для ЗП клиентов/АФК)',
-            bank_name="МТС банк",
-            bank_image="banks/3.png",
-            min_credit_period=3,
-            max_credit_period=30,
-            min_credit_amount=100000,
-            max_credit_amount=6000000,
-            price=24954,
-            percent=7.9
-        ).save()
+        for renter in CustomUser.objects.filter(is_renter=True):
+            for _ in range(random.randint(1, 3)):
+                deal = Deal(
+                    renter=renter,
+                    user=get_random_user(),
+                    status=random.randint(1, 2),
+                    date=random_date()
+                )
+                deal.flat = Flat.objects.filter(renter=renter).order_by('?')[0]
+                deal.save()
+
+        CustomUser.objects.create_superuser("root", "root@root.com", generate_phone_number())
+
+        print("Данные успешно сгенерированы")
+

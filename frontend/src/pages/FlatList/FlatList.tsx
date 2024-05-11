@@ -5,9 +5,10 @@ import {FlatType} from "../../utils/types.ts";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup} from "reactstrap";
 import {useAuth} from "../../hooks/useAuth.ts";
+import {formatPrice} from "../../utils/utils.ts";
 
 const FlatList = () => {
-    const {is_authenticated} = useAuth()
+    const {is_renter} = useAuth()
 
     const [items, setItems] = useState<FlatType[]>([])
 
@@ -46,10 +47,10 @@ const FlatList = () => {
                     </ButtonGroup>
                 </div>
                 <div className="right-container">
-                    {is_authenticated &&
+                    {is_renter &&
                         <Link to="/flats/add">
                             <Button color="primary">
-                                Сдать в аренду
+                                Новое заявление
                             </Button>
                         </Link>
                     }
@@ -63,7 +64,7 @@ const FlatList = () => {
                                 <img src={item.image.replace("minio", "localhost")} alt=""/>
                             </div>
                             <div className="item-info">
-                                <h3 className="item-price">{item.price}</h3>
+                                <h3 className="item-price">{formatPrice(item.price)}</h3>
                                 <div className="general-info">
                                     <span>{item.rooms}-комн.кв.</span>
                                     <span>{item.square}м <sup>2</sup></span>

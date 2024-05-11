@@ -15,7 +15,8 @@ export type UserType = {
     name: string,
     email: string,
     phone: string,
-    is_authenticated: boolean
+    is_authenticated: boolean,
+    is_renter: boolean
 }
 
 export type FlatType = {
@@ -32,15 +33,11 @@ export type FlatType = {
     renter: UserType
 }
 
-export type MortgageType = {
-    id: number,
-    name: string,
-    bank_name: string,
-    bank_image: string,
-    min_credit_period: string,
-    max_credit_period: string,
-    min_credit_amount: string,
-    max_credit_amount: string,
-    price: string,
-    percent: string
+export type DealType = {
+    user: UserType,
+    renter: UserType,
+    flat: FlatType,
+    status: number,
+    date: string
 }
+

@@ -19,17 +19,16 @@ const Header = () => {
                 <img src={logo} alt=""/>
             </Link>
 
-            <nav className="navigation">
-                <div className="nav__item">
-                    <Link to="/flats/">Покупка</Link>
-                </div>
-                <div className="nav__item">
-                    <Link to="/sale/">Продажа</Link>
-                </div>
-                <div className="nav__item">
-                    <Link to="/mortgage">Ипотека</Link>
-                </div>
-            </nav>
+            {is_authenticated &&
+                <nav className="navigation">
+                    <div className="nav__item">
+                        <Link to="/flats/">Квартиры</Link>
+                    </div>
+                    <div className="nav__item">
+                        <Link to="/deals">Сделки</Link>
+                    </div>
+                </nav>
+            }
 
             {!is_authenticated ?
                 <div className="profile">

@@ -5,7 +5,7 @@ import {LoginCredentials, RegisterCredentials, UserType} from "../utils/types.ts
 
 export function useAuth() {
     // @ts-ignore
-    const {is_authenticated, name, email, phone} = useSelector(state => state.user)
+    const {is_authenticated, name, email, phone, is_renter} = useSelector(state => state.user)
 
     const dispatch = useDispatch()
 
@@ -17,6 +17,7 @@ export function useAuth() {
                 name: response.data.name,
                 email: response.data.email,
                 phone: response.data.phone,
+                is_renter: response.data.is_renter,
                 is_authenticated: true
             }
 
@@ -40,6 +41,7 @@ export function useAuth() {
                 name: response.data.name,
                 email: response.data.email,
                 phone: response.data.phone,
+                is_renter: response.data.is_renter,
                 is_authenticated: true
             }
 
@@ -64,9 +66,10 @@ export function useAuth() {
         return response.status
     }
 
-    const setUser = async ({id, name, email, phone, is_authenticated}:UserType) => {
+    const setUser = async ({id, name, email, phone, is_authenticated, is_renter}:UserType) => {
         dispatch(updateUser({
             is_authenticated: is_authenticated,
+            is_renter: is_renter,
             id: id,
             name: name,
             email: email,
@@ -84,6 +87,7 @@ export function useAuth() {
 
     return {
         is_authenticated,
+        is_renter,
         name,
         email,
         phone,

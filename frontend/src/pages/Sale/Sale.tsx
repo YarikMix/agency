@@ -39,8 +39,6 @@ const SalePage = () => {
     }
 
     useEffect(() => {
-        console.log("useEffect")
-        // Revoke the data uris to avoid memory leaks
         // @ts-ignore
         return () => files.forEach(file => URL.revokeObjectURL(file.preview))
     }, [files])

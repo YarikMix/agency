@@ -6,7 +6,8 @@ const initialState: UserType = {
     name: "",
     email: "",
     phone: "",
-    is_authenticated: false
+    is_authenticated: false,
+    is_renter: false
 }
 
 const authSlice = createSlice({
@@ -15,6 +16,7 @@ const authSlice = createSlice({
     reducers: {
         updateUser: (state, action) => {
             state.is_authenticated = action.payload.is_authenticated
+            state.is_renter = action.payload.is_renter
             state.id = action.payload.id
             state.name = action.payload.name
             state.email = action.payload.email
@@ -23,6 +25,7 @@ const authSlice = createSlice({
         cleanUser: (state) => {
             state.id = null
             state.is_authenticated = false
+            state.is_renter = false
             state.name = ""
             state.email = ""
         }

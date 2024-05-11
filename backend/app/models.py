@@ -4,20 +4,23 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, name, email, phone, password="1234", **extra_fields):
+    def create_user(self, name, email, phone, is_renter=False, password="1234", **extra_fields):
         extra_fields.setdefault('name', name)
         email = self.normalize_email(email)
-        user = self.model(email=email, phone=phone, **extra_fields)
+        user = self.model(email=email, phone=phone, is_renter=is_renter, **extra_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, name, email, phone,  password="1234", **extra_fields):
+    def create_renter(self, name, email, phone, password="1234", **extra_fields):
+        return self.create_user(name, email, phone, True, password, **extra_fields)
+
+    def create_superuser(self, name, email, phone, is_renter=False, password="1234", **extra_fields):
         extra_fields.setdefault('is_moderator', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(name, email, phone, password, **extra_fields)
+        return self.create_user(name, email, phone, is_renter, password, **extra_fields)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -25,6 +28,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15, null=True)
     is_moderator = models.BooleanField(default=False)
+    is_renter = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -60,7 +64,7 @@ class Flat(models.Model):
         (4, 4)
     )
 
-    description = models.TextField(max_length=500, default="Описание", verbose_name="Описание", null=True)
+    description = models.TextField(default="Описание", verbose_name="Описание", null=True)
     address = models.CharField(max_length=100, default="ул. Ломоносовский проспект, 25к2", verbose_name="Адрес", null=True)
     rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат", choices=ROOMS_CHOICES, null=True)
     price = models.IntegerField(default=25000, verbose_name="Цена", null=True)
@@ -79,41 +83,21 @@ class Flat(models.Model):
         verbose_name_plural = "Квартиры"
 
 
-class Sale(models.Model):
-    REALTY_CHOICES = (
-        (1, "Квартира"),
-        (2, "Команат"),
-        (3, "Дом"),
-        (4, "Земельный участок"),
-        (5, "Дача"),
-        (6, "Гараж")
+class Deal(models.Model):
+    STATUS_CHOICES = (
+        (1, 'В работе'),
+        (2, 'Завершена')
     )
 
-    realty_type = models.IntegerField(default=1, verbose_name="Тип недвижимости")
-    description = models.TextField(max_length=500, verbose_name="Описание")
-    image = models.ImageField(default="flats/default.png", verbose_name="Картинка")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", null=True)
-    price = models.IntegerField(default="Цена", null=True)
-
-    class Meta:
-        verbose_name = "Продажа"
-        verbose_name_plural = "Продажи"
-
-
-class Mortgage(models.Model):
-    name = models.CharField(default="Жильё от застройщика с господдержкой по 2 документам", max_length=100, verbose_name="Название")
-    bank_name = models.CharField(default="Сбербанк", max_length=100, verbose_name="Название")
-    bank_image = models.ImageField(default="default.png", verbose_name="Логотип банка")
-    min_credit_period = models.IntegerField(default=1, verbose_name="Минимальный срок кредита", null=True)
-    max_credit_period = models.IntegerField(default=30, verbose_name="Максимальный срок кредита", null=True)
-    min_credit_amount = models.IntegerField(default=100000, verbose_name="Минимальный размер кредита", null=True)
-    max_credit_amount = models.IntegerField(default=6000000, verbose_name="Максимальный размер кредита", null=True)
-    price = models.IntegerField(default="23995", verbose_name="Платёж", null=True)
-    percent = models.FloatField(default="7.7", verbose_name="Ставка", null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Покупатель", null=True, related_name='user')
+    renter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Риелтор", null=True, related_name='renter')
+    flat = models.ForeignKey(Flat, on_delete=models.CASCADE, verbose_name="Квартира", null=True)
+    status = models.IntegerField(default=1, choices=STATUS_CHOICES, verbose_name="Статус", null=True)
+    date = models.DateTimeField(verbose_name="Дата", null=True)
 
     def __str__(self):
-        return "Ипотека №" + str(self.pk)
+        return f"Сделка {self.pk}"
 
     class Meta:
-        verbose_name = "Ипотека"
-        verbose_name_plural = "Ипотеки"
+        verbose_name = "Сделка"
+        verbose_name_plural = "Сделки"

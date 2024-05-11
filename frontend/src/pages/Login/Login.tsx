@@ -4,6 +4,7 @@ import "./Login.sass"
 import React from "react";
 import {useAuth} from "../../hooks/useAuth.ts";
 import {LoginCredentials} from "../../utils/types.ts";
+import {toast} from "react-toastify";
 
 const Login = () => {
 
@@ -23,11 +24,14 @@ const Login = () => {
             password: passwordField.value
         }
 
-        const status = await login(data)
+        try {
+            const status = await login(data)
 
-        if (status === 201) {
-            console.log("login successfully")
-            navigate("/")
+            if (status === 201) {
+                navigate("/")
+            }
+        } catch {
+            toast.error("Неверная почта или пароль")
         }
     }
 

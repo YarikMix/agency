@@ -4,8 +4,13 @@ import {Provider} from "react-redux";
 import store from "./store/store.ts";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useEffect} from "react";
 
 function App() {
+    useEffect(() => {
+        document.title = "Недвиж"
+    }, []);
+
     return (
         <Provider store={store}>
             <BrowserRouter>
