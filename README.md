@@ -1,10 +1,10 @@
 Веб-приложение "Агенство недвижимости"
 
 * Бэкенд: Django REST Framework
-* Фронтенд: React, Redux Toolkit
+* Фронтенд: React, Redux Toolkit, Sass, Reactstrap
 * База данных: PostgreSQL
 * Сервер статики: Minio
-* Другие используемые технологии: Docker, Nginx, Sass, Reactstrap
+* Другие используемые технологии: Docker, Nginx
 
 ## Основные страницы сайта
 
