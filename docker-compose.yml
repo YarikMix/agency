@@ -71,11 +71,11 @@ services:
         source: pgdbdata
         target: /var/lib/postgresql/data
 
-  # client:
-  #   build: ./frontend
-  #   container_name: client_frontend
-  #   ports:
-  #     - "3000:3000"
+  client:
+    build: ./frontend
+    container_name: client_frontend
+    ports:
+      - "3000:3000"
 
 volumes:
   minio-data:
