@@ -43,6 +43,7 @@ class Command(BaseCommand):
         CustomUser.objects.all().delete()
         Flat.objects.all().delete()
         Deal.objects.all().delete()
+        Order.objects.all().delete()
 
         fake = Faker("ru_RU")
 
@@ -78,6 +79,18 @@ class Command(BaseCommand):
                 )
                 deal.renter = deal.flat.renter
                 deal.save()
+
+            for _ in range(random.randint(1, 5)):
+                order = Order(
+                    user=user,
+                    type=random.randint(1, 2),
+                    status=random.randint(1, 3),
+                    date=random_date(),
+                    rooms=random.randint(1, 4),
+                    price=random.randint(100, 250) * 100000,
+                    square=random.randint(10, 30),
+                )
+                order.save()
 
         for renter in CustomUser.objects.filter(is_renter=True):
             for _ in range(random.randint(1, 3)):

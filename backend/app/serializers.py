@@ -36,6 +36,10 @@ class UserLoginSerializer(serializers.Serializer):
 
 class FlatSerializer(serializers.ModelSerializer):
     renter = UserSerializer()
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, flat):
+        return flat.image.url.replace("minio", "localhost", 1)
 
     class Meta:
         model = Flat
@@ -52,3 +56,14 @@ class DealSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class OrderSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['date'] = timezone.now()
+    #     return representation
+
+    class Meta:
+        model = Order
+        fields = "__all__"

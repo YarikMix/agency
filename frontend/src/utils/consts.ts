@@ -13,3 +13,14 @@ export const DEAL_DOCUMENTS = {
     7: "Агентский договор",
     8: "Счет на оплату услуг"
 }
+
+export const ORDER_STATUSES = {
+    1: "Сформирована",
+    2: "Рассматривается",
+    3: "Рассматривается"
+}
+
+export const ORDER_TYPES = {
+    1: "Покупка",
+    2: "Продажа"
+}

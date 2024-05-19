@@ -101,3 +101,39 @@ class Deal(models.Model):
     class Meta:
         verbose_name = "Сделка"
         verbose_name_plural = "Сделки"
+
+
+class Order(models.Model):
+    TYPE_CHOICES = (
+        (1, 'Покупка'),
+        (2, 'Продажа')
+    )
+
+    STATUS_CHOICES = (
+        (1, 'Сформирована'),
+        (2, 'Рассматривается'),
+        (3, 'Завершена')
+    )
+
+    ROOMS_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4)
+    )
+
+    type = models.IntegerField(default=1, choices=TYPE_CHOICES, verbose_name="Тип", null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Клиент", null=True)
+    status = models.IntegerField(default=1, choices=STATUS_CHOICES, verbose_name="Статус", null=True)
+    date = models.DateTimeField(verbose_name="Дата создания", null=True)
+    rooms = models.IntegerField(default=1, verbose_name="Кол-во комнат", choices=ROOMS_CHOICES, null=True)
+    price = models.IntegerField(default=1, verbose_name="Цена", null=True)
+    square = models.IntegerField(default=1, verbose_name="Площадь", null=True)
+
+    def __str__(self):
+        return f"Заявка {self.pk}"
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявка"
+

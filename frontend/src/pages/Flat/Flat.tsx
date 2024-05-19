@@ -83,7 +83,7 @@ const FlatPage = () => {
         <div className="flat-page">
             <div className="container">
                 <div className="flag-images-wrapper">
-                    <img src={data.image.replace("minio", "localhost")} alt=""/>
+                    <img src={data.image} alt=""/>
                 </div>
                 <div className="flat-preview-wrapper">
                     <div className="left-container">

@@ -17,5 +17,9 @@ urlpatterns = [
     path("api/deals/<int:deal_id>/", get_deal),
     path("api/deals/", get_deals),
     path("api/deals/add/", add_deal),
-    path("api/deals/<int:deal_id>/update_status/", update_deal_status)
+    path("api/deals/<int:deal_id>/update_status/", update_deal_status),
+
+    # Заявки
+    path("api/orders/add/", add_order),
+    path("api/orders/", get_orders)
 ]

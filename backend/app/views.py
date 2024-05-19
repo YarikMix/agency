@@ -95,13 +95,37 @@ def update_deal_status(request, deal_id):
 
     serializer = DealSerializer(deal, data=request.data, partial=True)
 
-    print(request.data)
-    print(serializer.is_valid())
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data, status=200)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_order(request):
+    order = Order.objects.create()
+    order.user = identity_user(request)
+    order.date = timezone.now()
+    order.save()
+
+    serializer = OrderSerializer(order, data=request.data, partial=True)
 
     if serializer.is_valid():
         serializer.save()
 
     return Response(serializer.data, status=200)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_orders(request):
+    user = identity_user(request)
+    orders = Order.objects.filter(user=user)
+
+    serializer = OrderSerializer(orders, many=True)
+
+    return Response(serializer.data)
 
 
 @api_view(["POST"])

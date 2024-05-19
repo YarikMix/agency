@@ -27,13 +27,16 @@ const Header = () => {
                     <div className="nav__item">
                         <Link to="/deals">Сделки</Link>
                     </div>
+                    <div className="nav__item">
+                        <Link to="/orders">Заявки</Link>
+                    </div>
                 </nav>
             }
 
             {!is_authenticated ?
                 <div className="profile">
                     <Link to="/login">
-                        <Button color="primary">Войти</Button>
+                    <Button color="primary">Войти</Button>
                     </Link>
                 </div>
                 :

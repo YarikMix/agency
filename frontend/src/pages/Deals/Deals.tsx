@@ -1,6 +1,6 @@
 import "./Deals.sass"
-import {useEffect, useMemo, useState} from "react";
-import {Button, Spinner} from "reactstrap";
+import {useMemo} from "react";
+import {Button} from "reactstrap";
 import CustomTable from "../../components/CustomTable/CustomTable.tsx";
 import {Link} from "react-router-dom";
 import {api} from "../../utils/api.ts";
@@ -8,34 +8,31 @@ import 'moment/locale/ru'
 import {DEAL_STATUSES} from "../../utils/consts.ts";
 import moment from "moment/moment";
 import {useAuth} from "../../hooks/useAuth.ts";
+import {useQuery} from "react-query";
 
 
 const DealsPage = () => {
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(false)
-
     const {is_renter} = useAuth()
 
-    const fetchDeals = async () => {
-        setLoading(true)
-        api.get(`/deals/`).then(response => {
-            console.log(response.data)
-            setData(response.data.map(deal => ({
-                id: deal.id,
-                fio: is_renter ? deal.user.name : deal.renter.name,
-                data: deal.date,
-                flat: deal.flat.id,
-                phone: is_renter ? deal.user.phone : deal.renter.phone,
-                status: deal.status
-            })))
-        }).finally(() => {
-            setLoading(false)
-        })
+    const fetchData = async () => {
+        const response= await api.get(`/deals/`)
+        return response.data.map(deal => ({
+            id: deal.id,
+            fio: is_renter ? deal.user.name : deal.renter.name,
+            data: deal.date,
+            flat: deal.flat.id,
+            phone: is_renter ? deal.user.phone : deal.renter.phone,
+            status: deal.status
+        }))
     }
 
-    useEffect(() => {
-        fetchDeals()
-    }, []);
+    const { data } = useQuery(
+        'dealsData',
+        () => fetchData(),
+        {
+            initialData: []
+        }
+    );
 
     const columns = useMemo(
         () => [
@@ -84,11 +81,7 @@ const DealsPage = () => {
         <div className="deals-page-wrapper">
             <div className="deals-page-container">
                 <h3>Ваши сделки</h3>
-                {loading ?
-                    <Spinner/>
-                    :
-                    <CustomTable columns={columns} data={data}/>
-                }
+                <CustomTable columns={columns} data={data}/>
             </div>
         </div>
     )

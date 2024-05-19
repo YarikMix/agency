@@ -8,11 +8,12 @@ import {useAuth} from "../../hooks/useAuth.ts";
 import {formatPrice} from "../../utils/utils.ts";
 
 const FlatList = () => {
-    const {is_renter} = useAuth()
+    const {is_authenticated} = useAuth()
 
     const [items, setItems] = useState<FlatType[]>([])
 
     const [roomsFilter, setRoomsFilter] = useState<string>("-1")
+
 
     const fetchItems = async () =>  {
         const response = await api.get("/flats/", {
@@ -22,7 +23,6 @@ const FlatList = () => {
         })
 
         if (response.status == 200) {
-            console.log(response.data)
             setItems(response.data)
         }
     }
@@ -47,10 +47,17 @@ const FlatList = () => {
                     </ButtonGroup>
                 </div>
                 <div className="right-container">
-                    {is_renter &&
+                    {is_authenticated &&
+                        <Link to="/orders/add">
+                            <Button color="primary">
+                                Заявку на покупку
+                            </Button>
+                        </Link>
+                    }
+                    {is_authenticated &&
                         <Link to="/flats/add">
                             <Button color="primary">
-                                Новое заявление
+                                Заявку на продажу
                             </Button>
                         </Link>
                     }
@@ -61,7 +68,7 @@ const FlatList = () => {
                     <Link to={"/flats/" + item.id} key={item.id}>
                         <div className="item" >
                             <div className="item-images">
-                                <img src={item.image.replace("minio", "localhost")} alt=""/>
+                                <img src={item.image} alt=""/>
                             </div>
                             <div className="item-info">
                                 <h3 className="item-price">{formatPrice(item.price)}</h3>

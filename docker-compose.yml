@@ -12,12 +12,21 @@ services:
       - "8000:8000"
     environment:
       AWS_ACCESS_KEY: minio
-      AWS_SECRET_KEY: minio124
+      AWS_SECRET_KEY: minio123
       AWS_BUCKET_NAME: images
       PYTHONUNBUFFERED: 1
     depends_on:
+      - migration
       - pgdb
       - minio
+
+  migration:
+    image: uzman
+    command: bash -c "python manage.py migrate --noinput && python manage.py fill_db"
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - pgdb
 
   minio:
     hostname: minio/minio:latest
@@ -25,7 +34,7 @@ services:
     command: server --console-address ":9001" /data/
     environment:
       MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio124
+      MINIO_SECRET_KEY: minio123
     expose:
       - "9000"
       - "9001"
@@ -43,7 +52,7 @@ services:
       - minio
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc config host add --api s3v4 s3 http://minio:9000 minio minio124;
+      /usr/bin/mc config host add --api s3v4 s3 http://minio:9000 minio minio123;
       /usr/bin/mc mb s3/images;
       /usr/bin/mc anonymous set public s3/images;
       "
@@ -76,6 +85,8 @@ services:
     container_name: client_frontend
     ports:
       - "3000:3000"
+    environment:
+      - VITE_API_URL=http://django:8000
 
 volumes:
   minio-data:

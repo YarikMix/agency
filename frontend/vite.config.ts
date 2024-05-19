@@ -1,13 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig, loadEnv } from 'vite'
 
-export default defineConfig({
-    server: {
-        host: true,
-        port: 3000,
-        proxy: {
-           "/api": "http://django:8000",
-        }
-    },
-    plugins: [react()],
-})
+export default ({mode}) => {
+    process.env = loadEnv(mode, process.cwd());
+
+    return defineConfig({
+        server: {
+            host: true,
+            port: 3000,
+            proxy: {
+               "/api": process.env.VITE_API_URL,
+            },
+        },
+        plugins: [
+            react()
+        ],
+    })
+}

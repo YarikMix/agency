@@ -9,6 +9,8 @@ import SalePage from "../pages/Sale/Sale.tsx";
 import AddFlatPage from "../pages/AddFlatPage/AddFlatPage.tsx";
 import DealsPage from "../pages/Deals/Deals.tsx";
 import DealPage from "../pages/Deal/Deal.tsx";
+import AddOrderPage from "../pages/AddOrderPage/AddOrderPage.tsx";
+import {OrdersPage} from "../pages/Orders/Orders.tsx";
 
 const Router = () => {
     return (
@@ -24,6 +26,8 @@ const Router = () => {
             <Route path="/sale" element={<SalePage />} />
             <Route path="/deals" element={<DealsPage />} />
             <Route path="/deals/:id" element={<DealPage />} />
+            <Route path="/orders/add" element={<AddOrderPage />} />
+            <Route path="/orders/" element={<OrdersPage />} />
         </Routes>
     )
 }

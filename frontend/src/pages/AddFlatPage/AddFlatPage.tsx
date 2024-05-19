@@ -9,8 +9,12 @@ import {useDropzone} from "react-dropzone";
 import {toast} from "react-toastify";
 import {api} from "../../utils/api.ts";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 const AddFlatPage = () => {
+
+    const {is_renter} = useAuth()
+
     const [address, setAddress] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [price, setPrice] = useState<string>("")
@@ -30,11 +34,34 @@ const AddFlatPage = () => {
         console.log("handleSubmit")
 
         const formData = new FormData()
+
+        formData.append("price", price)
+        formData.append("rooms", rooms)
+        formData.append("square", square)
+
+        if (!is_renter) {
+
+            formData.append("type", "1")
+
+            const response = await api.post("/orders/add/", formData)
+
+            console.log(response.status)
+
+            if (response.status == 200) {
+                toast.success(`Заявка успешна сформирована`);
+                navigate("/orders/")
+            }
+
+            return
+        }
+
+
+        formData.append("price", price)
+        formData.append("rooms", rooms)
+        formData.append("square", square)
         formData.append("address", address)
         formData.append("description", description)
-        formData.append("price", price)
         formData.append("floor", floor)
-        formData.append("rooms", rooms)
         formData.append("balcony", balcony)
         formData.append("parking", parking)
 
@@ -42,7 +69,6 @@ const AddFlatPage = () => {
             formData.append('image', files[0], files[0].name)
         }
 
-        console.log(Object.fromEntries(formData))
 
         const response = await api.post("/flats/add/", formData, {
             headers: {
@@ -101,7 +127,7 @@ const AddFlatPage = () => {
         <div className="add-flat-page-wrapper">
             <Form onSubmit={handleSubmit} className="add-flat-page-form">
                 <h3>
-                    Новая аренда
+                    Заявка на продажу
                 </h3>
                 <FormGroup>
                     <Label for="address">
@@ -120,24 +146,24 @@ const AddFlatPage = () => {
                     <Label for="price">
                         Цена
                     </Label>
-                    <Input placeholder="Цена" type="text" id="description" value={price} onChange={e => setPrice(e.target.value)} required/>
+                    <Input placeholder="Цена" type="number" id="description" value={price} onChange={e => setPrice(e.target.value)} required/>
                 </FormGroup>
                 <CustomDropdown label={"Балкон"} options={balconyOptions} selectedItem={balcony} setSelectedItem={setBalcony} />
                 <FormGroup>
                     <Label for="floor">
                         Этаж
                     </Label>
-                    <Input placeholder="Этаж" type="text" id="floor" value={floor} onChange={e => setFloor(e.target.value)} required/>
+                    <Input placeholder="Этаж" type="number" id="floor" value={floor} onChange={e => setFloor(e.target.value)} required/>
                 </FormGroup>
                 <CustomDropdown label={"Парковка"} options={parkingOptions} selectedItem={parking} setSelectedItem={setParking}  />
                 <FormGroup>
                     <Label for="square">
                         Площадь
                     </Label>
-                    <Input placeholder="Площадь" type="text" id="square" value={square} onChange={e => setSquare(e.target.value)}  required/>
+                    <Input placeholder="Площадь" type="number" id="square" value={square} onChange={e => setSquare(e.target.value)}  required/>
                 </FormGroup>
 
-                <h4>Фото квартиры</h4>
+                <h4>Фото</h4>
 
                 <div {...getRootProps()} className="files-uploader-container">
                     <input {...getInputProps()} />
