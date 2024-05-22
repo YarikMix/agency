@@ -16,6 +16,17 @@ import 'moment/locale/ru'
 import {downloadFile, formatPrice} from "../../utils/utils.ts";
 import CustomDropdown from "../../components/CustomDropdown/CustomDropdown.tsx";
 import {useAuth} from "../../hooks/useAuth.ts";
+import {DateRangePicker} from "rsuite";
+import subDays from 'date-fns/subDays';
+import addDays from 'date-fns/addDays';
+import startOfMonth from 'date-fns/startOfMonth';
+import endOfMonth from 'date-fns/endOfMonth';
+import addMonths from 'date-fns/addMonths';
+import "rsuite/dist/rsuite-no-reset.css"
+import {DateRange} from "rsuite/DateRangePicker";
+import {RangeType} from "rsuite/DatePicker";
+import { SelectPicker } from 'rsuite';
+import {ru, Faker} from '@faker-js/faker';
 
 type ChatMessageProps = {
     self: boolean,
@@ -161,6 +172,12 @@ const FilesContainer = () => {
     )
 }
 
+export const DAY = 86400000
+export const NOW = Date.now()
+export const PREV_DAY = Date.now() - DAY
+export const NEXT_DAY = Date.now() + DAY
+export const NEXT_MONTH = Date.now() + 30 * DAY
+
 const DocumentsModal = () => {
     const [selectedDocument, setSelectedDocument] = useState("1")
 
@@ -226,6 +243,69 @@ const DealPage = () => {
         fetchData()
     }, [])
 
+    const [date, setDate] = useState({
+        start: new Date(new Date().getFullYear() - 10, 0, 1).getTime(),
+        end: new Date(NOW + 15 * DAY).getTime()
+    })
+
+    const predefinedBottomRanges: RangeType<DateRange[]> = [
+        {
+            label: 'Сегодня',
+            value: [new Date(), new Date()]
+        },
+        {
+            label: 'Вчера',
+            value: [addDays(new Date(), -1), addDays(new Date(), -1)]
+        },
+        {
+            label: 'За последнюю неделю',
+            value: [subDays(new Date(), 6), new Date()]
+        },
+        {
+            label: 'За последний месяц',
+            value: [startOfMonth(addMonths(new Date(), -1)), endOfMonth(addMonths(new Date(), -1))]
+        },
+        {
+            label: 'За всё время',
+            value: [new Date(new Date().getFullYear() - 10, 0, 1), new Date()]
+        }
+    ];
+
+    const updateDate = (value) => {
+        let tmp = {}
+
+        if (value == null) {
+            tmp = {
+                start: new Date(PREV_DAY).getTime(),
+                end: new Date(NEXT_DAY).getTime()
+            }
+        } else {
+            tmp = {
+                start: new Date(value[0]).getTime(),
+                end: new Date(value[1]).getTime()
+            }
+        }
+
+        setDate(tmp)
+    }
+
+
+    const [usersData, setUsersData] = useState<string[]>([])
+
+    useEffect(() => {
+
+        const faker = new Faker({
+            locale: [ru],
+        });
+
+        const createUsers = (numUsers = 15) => {
+            return Array.from({length: numUsers}, () => faker.person.fullName());
+        }
+
+        setUsersData(createUsers())
+
+    }, []);
+
     if (data == undefined) {
         return (
             <div>
@@ -250,7 +330,32 @@ const DealPage = () => {
                     {is_renter ? <span>Покупатель: {data.user.name}</span> : <span>Риелтор: {data.renter.name}</span> }
                     {is_renter ? <span>Телефон покупателя: +{data.user.phone}</span> : <span>Телефон риелтора: +{data.renter.phone}</span> }
 
-                    <DocumentsModal />
+                    {is_renter &&
+                        <div className="documents-wrapper">
+
+                            <DocumentsModal />
+
+                            <div className="document_block">
+                                <h5>Срез по дате</h5>
+                                <DateRangePicker
+                                    ranges={predefinedBottomRanges}
+                                    value={[new Date(date.start), new Date(date.end)]}
+                                    onChange={updateDate}
+                                    cleanable={false}
+                                    format="yyyy-MM-dd"
+                                    defaultCalendarValue={[new Date(date.start), new Date(date.end)]}/>
+                            </div>
+
+                            <div className="document_block">
+                                <h5>Срез по сотруднику</h5>
+                                <SelectPicker data={usersData.map(
+                                    user => ({ label: user, value: user })
+                                )} placeholder="Сотрудник" style={{ width: 224 }} />
+                            </div>
+    
+                        </div>
+                    }
+
                 </div>
 
                 <FilesContainer/>

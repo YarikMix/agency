@@ -7,7 +7,10 @@ const initialState: UserType = {
     email: "",
     phone: "",
     is_authenticated: false,
-    is_renter: false
+    is_renter: false,
+    passport_field1: "",
+    passport_field2: "",
+    passport_field3: ""
 }
 
 const authSlice = createSlice({
@@ -21,6 +24,9 @@ const authSlice = createSlice({
             state.name = action.payload.name
             state.email = action.payload.email
             state.phone = action.payload.phone
+            state.passport_field1 = action.payload.passport_field1
+            state.passport_field2 = action.payload.passport_field2
+            state.passport_field3 = action.payload.passport_field3
         },
         cleanUser: (state) => {
             state.id = null
@@ -28,6 +34,9 @@ const authSlice = createSlice({
             state.is_renter = false
             state.name = ""
             state.email = ""
+            state.passport_field1 = ""
+            state.passport_field2 = ""
+            state.passport_field3 = ""
         }
     }
 })

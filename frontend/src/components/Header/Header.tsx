@@ -7,7 +7,7 @@ import avatar from "../../../src/assets/avatar.png"
 import {useEffect} from "react";
 
 const Header = () => {
-    const {is_authenticated, checkUser} = useAuth()
+    const {is_authenticated, is_renter, checkUser} = useAuth()
 
     useEffect(() => {
         checkUser()
@@ -19,23 +19,28 @@ const Header = () => {
                 <img src={logo} alt=""/>
             </Link>
 
-            {is_authenticated &&
-                <nav className="navigation">
-                    <div className="nav__item">
-                        <Link to="/flats/">Квартиры</Link>
-                    </div>
-                    <div className="nav__item">
-                        <Link to="/deals">Сделки</Link>
-                    </div>
+            <nav className="navigation">
+                {is_authenticated &&
+                    <>
+                        <div className="nav__item">
+                            <Link to="/flats/">Квартиры</Link>
+                        </div>
+                        <div className="nav__item">
+                            <Link to="/deals">Сделки</Link>
+                        </div>
+                    </>
+                }
+
+                {is_authenticated && !is_renter &&
                     <div className="nav__item">
                         <Link to="/orders">Заявки</Link>
                     </div>
-                </nav>
-            }
+                }
+            </nav>
 
             {!is_authenticated ?
                 <div className="profile">
-                    <Link to="/login">
+                <Link to="/login">
                     <Button color="primary">Войти</Button>
                     </Link>
                 </div>

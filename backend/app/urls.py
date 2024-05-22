@@ -8,6 +8,9 @@ urlpatterns = [
     path("api/check/", check),
     path("api/logout/", logout),
 
+    # Пользователи
+    path("api/profile/update/", update_profile),
+
     # Квартиры
     path("api/flats/", get_flats),
     path("api/flats/add/", add_flat),

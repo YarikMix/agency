@@ -16,7 +16,10 @@ export type UserType = {
     email: string,
     phone: string,
     is_authenticated: boolean,
-    is_renter: boolean
+    is_renter: boolean,
+    passport_field1: string,
+    passport_field2: string,
+    passport_field3: string
 }
 
 export type FlatType = {

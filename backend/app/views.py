@@ -204,3 +204,16 @@ def logout(request):
     response.delete_cookie('access_token')
 
     return response
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    user = identity_user(request)
+
+    serializer = UserSerializer(user, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data, status=200)

@@ -27,6 +27,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15, null=True)
+    passport_field1 = models.CharField(max_length=25, blank=True, null=True)
+    passport_field2 = models.CharField(max_length=100, blank=True, null=True)
+    passport_field3 = models.CharField(max_length=100, blank=True, null=True)
     is_moderator = models.BooleanField(default=False)
     is_renter = models.BooleanField(default=False)
 

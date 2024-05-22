@@ -8,12 +8,11 @@ import {useAuth} from "../../hooks/useAuth.ts";
 import {formatPrice} from "../../utils/utils.ts";
 
 const FlatList = () => {
-    const {is_authenticated} = useAuth()
+    const {is_authenticated, is_renter} = useAuth()
 
     const [items, setItems] = useState<FlatType[]>([])
 
     const [roomsFilter, setRoomsFilter] = useState<string>("-1")
-
 
     const fetchItems = async () =>  {
         const response = await api.get("/flats/", {
@@ -47,7 +46,7 @@ const FlatList = () => {
                     </ButtonGroup>
                 </div>
                 <div className="right-container">
-                    {is_authenticated &&
+                    {is_authenticated && !is_renter &&
                         <Link to="/orders/add">
                             <Button color="primary">
                                 Заявку на покупку
@@ -57,7 +56,7 @@ const FlatList = () => {
                     {is_authenticated &&
                         <Link to="/flats/add">
                             <Button color="primary">
-                                Заявку на продажу
+                                {is_renter ? "Обьявление о продаже" : "Заявку на продажу" }
                             </Button>
                         </Link>
                     }

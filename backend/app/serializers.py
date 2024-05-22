@@ -6,7 +6,7 @@ from app.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'name', 'email', 'is_renter', "phone")
+        fields = "__all__"
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):

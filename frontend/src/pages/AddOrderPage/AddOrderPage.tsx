@@ -1,4 +1,4 @@
-import {Button, Form, Input, Label} from "reactstrap";
+import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import "./AddOrderPage.sass"
 import {FormEvent, useState} from "react"
 import Slider from "react-slider"
@@ -12,6 +12,7 @@ const AddOrderPage = () => {
     const [rooms, setRooms] = useState([1, 4])
     const [square, setSquare] = useState([10, 120])
     const [price, setPrice] = useState(1000000)
+    const [description, setDescription] = useState("")
 
     const navigate = useNavigate()
 
@@ -23,7 +24,7 @@ const AddOrderPage = () => {
         formData.append("price", price.toString())
         formData.append("rooms", rooms[1].toString())
         formData.append("square", square[1].toString())
-        formData.append("type", "2")
+        formData.append("type", "1")
 
         const response = await api.post("/orders/add/", formData)
 
@@ -54,6 +55,12 @@ const AddOrderPage = () => {
                     <Label for="price-input">Макс. цена (руб)</Label>
                     <Input type="text" id="price-input" value={formatPrice(price)} onChange={e => setPrice(e.target.value.replace(/ /g, ""))}></Input>
                 </div>
+                <FormGroup>
+                    <Label for="description">
+                        Описание
+                    </Label>
+                    <Input placeholder="Описание" type="textarea" id="description" value={description} onChange={e => setDescription(e.target.value)} required/>
+                </FormGroup>
                 <Button color="primary">Отправить</Button>
             </Form>
         </div>

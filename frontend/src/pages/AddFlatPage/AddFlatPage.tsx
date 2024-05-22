@@ -41,7 +41,7 @@ const AddFlatPage = () => {
 
         if (!is_renter) {
 
-            formData.append("type", "1")
+            formData.append("type", "2")
 
             const response = await api.post("/orders/add/", formData)
 
@@ -127,7 +127,7 @@ const AddFlatPage = () => {
         <div className="add-flat-page-wrapper">
             <Form onSubmit={handleSubmit} className="add-flat-page-form">
                 <h3>
-                    Заявка на продажу
+                    {is_renter ? "Обьявление о продаже" : "Заявка на продажу" }
                 </h3>
                 <FormGroup>
                     <Label for="address">
