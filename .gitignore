@@ -1,3 +1,6 @@
 frontend/agency/.idea
 backend/agency/.idea
 
+*.pyc
+*.pyc
+/backend/app/__pycache__
